@@ -2,27 +2,29 @@ const GAS_URL = "https://script.google.com/macros/s/AKfycbw54xJK3zSW91nW3x3HZQVU
 
 let lastCode = null;
 
-// 初始化 Quagga
-Quagga.init({
-    inputStream: {
-        name: "Live",
-        type: "LiveStream",
-        target: document.querySelector('#scanner'),
-        constraints: {
-            facingMode: "environment"
+document.getElementById('startBtn').addEventListener('click', () => {
+    // 初始化 Quagga
+    Quagga.init({
+        inputStream: {
+            name: "Live",
+            type: "LiveStream",
+            target: document.querySelector('#scanner'),
+            constraints: {
+                facingMode: "environment"
+            },
         },
-    },
-    decoder: {
-        readers: ["ean_reader"]
-    }
-}, function(err) {
-    if(err){
-        console.error(err);
-        alert("相機初始化失敗");
-        return;
-    }
-    console.log("Quagga 初始化完成");
-    Quagga.start();
+        decoder: {
+            readers: ["ean_reader"]
+        }
+    }, function(err){
+        if(err){
+            console.error(err);
+            alert("相機初始化失敗");
+            return;
+        }
+        Quagga.start();
+        document.getElementById('startBtn').style.display = 'none'; // 隱藏按鈕
+    });
 });
 
 // 條碼掃描事件
@@ -32,7 +34,6 @@ Quagga.onDetected(function(result){
         lastCode = code;
         document.getElementById("result").textContent = code;
 
-        // 上傳到試算表
         fetch(`${GAS_URL}?isbn=${code}`)
         .then(res => res.text())
         .then(data => {
