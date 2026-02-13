@@ -4,30 +4,19 @@
   <meta charset="UTF-8">
   <title>ISBN 條碼掃描器</title>
   <script src="https://unpkg.com/quagga@0.12.1/dist/quagga.min.js"></script>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      margin: 20px;
-    }
-    video {
-      border: 2px solid #333;
-      border-radius: 8px;
-      width: 100%;
-      max-width: 500px;
-      height: auto;
-    }
-    p {
-      font-size: 1.2em;
-      margin: 10px 0;
-    }
-  </style>
 </head>
 <body>
   <h1>ISBN 條碼掃描器</h1>
-
-  <!-- ✅ 改造過的 video 標籤 -->
-  <video id="scanner" autoplay playsinline></video>
-
+  
+  <!-- 顯示相機影像 -->
+  <video id="scanner" width="100%" autoplay></video>
+  
+  <!-- 顯示掃描結果 -->
   <p>掃描結果: <span id="result">尚未掃描</span></p>
+  
+  <!-- 送出到 Google 試算表狀態 -->
   <p>上傳狀態: <span id="status">尚未上傳</span></p>
+  
+  <script src="script.js"></script>
+</body>
+</html>
