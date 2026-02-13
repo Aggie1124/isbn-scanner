@@ -1,7 +1,7 @@
-// 你的 Google Apps Script Web App URL
-const GAS_URL = "https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec";
+// ✅ 你的 Web App URL
+const GAS_URL = "https://script.google.com/macros/s/AKfycbw54xJK3zSW91nW3x3HZQVUU572hfS1zfnVz_8e9S2GYa1EU8O3C9z_teC5MuxhViCl/exec";
 
-let lastCode = null;
+let lastCode = null; // 避免重複送出同一條碼
 
 // 初始化 Quagga
 Quagga.init({
@@ -10,16 +10,16 @@ Quagga.init({
         type: "LiveStream",
         target: document.querySelector('#scanner'),
         constraints: {
-            facingMode: "environment"
+            facingMode: "environment" // 使用後鏡頭
         },
     },
     decoder: {
-        readers: ["ean_reader"]
+        readers: ["ean_reader"] // ISBN 條碼通常是 EAN-13
     }
 }, function(err) {
     if(err){
         console.error(err);
-        alert("相機初始化失敗");
+        alert("相機初始化失敗，請確認權限與 HTTPS 網頁");
         return;
     }
     console.log("Quagga 初始化完成");
@@ -29,11 +29,13 @@ Quagga.init({
 // 條碼掃描事件
 Quagga.onDetected(function(result){
     let code = result.codeResult.code;
+
+    // 避免重複掃描同一條碼
     if(code !== lastCode){
         lastCode = code;
         document.getElementById("result").textContent = code;
 
-        // 上傳到試算表
+        // 上傳到 Google 試算表
         fetch(`${GAS_URL}?isbn=${code}`)
         .then(res => res.text())
         .then(data => {
